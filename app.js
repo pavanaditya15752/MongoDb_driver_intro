@@ -1,24 +1,54 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require("mongoose");
 
-const url = 'mongodb://127.0.0.1:27017';
-const dbName = 'fruitsDB';
+mongoose.connect("mongodb://127.0.0.1:27017/fruitsDB", { useNewUrlParser: true });
 
-async function connectToMongoDB() {
-  const client = new MongoClient(url);
+const fruitSchema = new mongoose.Schema({
+  name: String,
+  rating: Number,
+  review: String
+});
 
-  try {
-    await client.connect();
-    console.log('Connected to the database');
-    const db = client.db(dbName);
+const Fruit = mongoose.model("Fruit", fruitSchema);
 
-    // Your database operations go here
+const fruit = new Fruit({
+  name: "Apple",
+  rating: 9,
+  review: "Pretty red"
+});
 
-    console.log('Database operations completed');
-  } catch (err) {
-    console.error('Error connecting to the database:', err);
-  } finally {
-    client.close();
-  }
-}
+const personSchema=new mongoose.Schema({
+  name:String,
+  age:Number
+});
 
-connectToMongoDB();
+const Person=mongoose.model("Person",personSchema);
+
+const person=new Person({
+  name:"John",
+  age:37
+});
+
+const kiwi=new Fruit({
+  name:"kiwi",
+  score:3,
+  review:"good"
+
+})
+const orange=new Fruit({
+  name:"orange ",
+  score:3,
+  review:"good"
+
+})
+const banana=new Fruit({
+  name:"kiwi",
+  score:3,
+  review:"good"
+
+})
+
+Fruit.insertMany([kiwi,orange,banana]);
+
+person.save();
+
+fruit.save();
